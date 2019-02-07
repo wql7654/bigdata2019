@@ -65,4 +65,4 @@ while True:
            ticket_count+=1
            print("축하합니다. 연간회원권 구매 이벤트에 당첨되셨습니다. 연간 회원 할인 티켓을 발행합니다. 잔여 할인티켓 %d장"%sale_ticket)
        
-   
+   # modify1
