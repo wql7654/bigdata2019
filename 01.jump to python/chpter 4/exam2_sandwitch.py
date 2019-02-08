@@ -1,18 +1,19 @@
 
-sandwich_input=[]
-ingredient_list=''
-order=0
-ixc=0
-def input_ingredient() :
-    while True:
 
+ingredient_list=[]
+order=0
+sandwich_input = []
+def input_ingredient() :
+
+    while True:
         sandwich_input=input("안녕하세요. 원하시는 재료를 입력하세요:")
         if sandwich_input=='종료':
-            break
-        ingredient_list=str(ingredient_list)+str(sandwich_input)
-        print(ingredient_list)
+            return ingredient_list
 
-    return  ingredient_list
+        else:
+            str(ingredient_list.append(sandwich_input))
+             # print(ingredient_list)
+
 
 def make_sandwiches(make):
     print("샌드위치를 만들겠습니다")
