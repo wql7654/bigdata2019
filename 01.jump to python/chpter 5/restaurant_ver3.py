@@ -38,18 +38,18 @@ class Restaurant_count:
 name_food=Restaurant("딩호와 짬뽕")
 name_food.describe_restaurant()
 name_food.open_restaurant()
-conts=Restaurant_count()
+count_class=Restaurant_count()
 while True:
     number_sev = (input("어서오세요. 몇명이십니까?(초기화:0입력,종료:-1,누적고객 확인:p) : "))
 
     print(number_sev)
     if number_sev == 'p':
-        conts.check_customer_number()
+        count_class.check_customer_number()
     elif number_sev == '-1':
         quit()
     elif number_sev == '0':
-        conts.zero_number_served()
+        count_class.zero_number_served()
     else:
-        conts.reset_number_served(int(number_sev))
-        conts.increment_number_served(int(number_sev))
+        count_class.reset_number_served(int(number_sev))
+        count_class.increment_number_served(int(number_sev))
 

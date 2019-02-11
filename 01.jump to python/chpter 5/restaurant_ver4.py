@@ -22,15 +22,10 @@ class Restaurant:
 class Restaurant_count:
     number_served = 0
     todays_customer = 0
-    def search_log(self):
-        f = open("./고객서빙현황로그.txt", 'r', encoding="UTF-8")
-        self.number_served = f.readlines()
-        f.close()
+    def __init__(self,num):
 
-    def write_log(ser_num):
-        f = open("./고객서빙현황로그.txt", 'w', encoding="UTF-8")
-        f.write(ser_num)
-        f.close()
+        self.number_served = int(num)
+        self.f = open("./고객서빙현황로그.txt", 'w', encoding="UTF-8")
 
     def reset_number_served(self, number):
         print("손님 %s명 들어오셨습니다. 자리를 안내해 드리겠습니다."%number)
@@ -45,7 +40,8 @@ class Restaurant_count:
         self.todays_customer =0
         print("손님 카운팅을 0으로 초기화 하였습니다")
     def __del__(self):
-        write_log(self.number_served+self.todays_customer )
+        self.f.write(str(self.number_served+self.todays_customer))
+        self.f.close()
 
 
 
@@ -53,19 +49,22 @@ class Restaurant_count:
 name_food=Restaurant("딩호와 짬뽕")
 name_food.describe_restaurant()
 name_food.open_restaurant()
-conts=Restaurant_count()
+f = open("./고객서빙현황로그.txt", 'r', encoding="UTF-8")
+backup_number=f.read()
+f.close()
+count_class=Restaurant_count(backup_number)
 while True:
     number_sev = (input("어서오세요. 몇명이십니까?(초기화:0입력,종료:-1,누적고객 확인:p) : "))
 
     print(number_sev)
     if number_sev == 'p':
-        conts.check_customer_number()
+        count_class.check_customer_number()
     elif number_sev == '-1':
         quit()
     elif number_sev == '0':
-        conts.zero_number_served()
+        count_class.zero_number_served()
     else:
-        conts.reset_number_served(int(number_sev))
-        conts.increment_number_served(int(number_sev))
+        count_class.reset_number_served(int(number_sev))
+        count_class.increment_number_served(int(number_sev))
 
 
