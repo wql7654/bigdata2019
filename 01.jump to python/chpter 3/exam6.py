@@ -1,3 +1,4 @@
+
 # coding: cp949
 count_null=0
 view_star=0

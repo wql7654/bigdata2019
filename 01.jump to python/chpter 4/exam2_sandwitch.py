@@ -12,7 +12,6 @@ def input_ingredient() :
 
         else:
             str(ingredient_list.append(sandwich_input))
-             # print(ingredient_list)
 
 
 def make_sandwiches(make):
@@ -20,10 +19,6 @@ def make_sandwiches(make):
     for make_sand in make:
         print("%s 추가합니다."%make_sand)
     print("여기 주문하신 샌드위치 만들었습니다. 맛있게 드세요.")
-
-
-
-
 
 
 while True:

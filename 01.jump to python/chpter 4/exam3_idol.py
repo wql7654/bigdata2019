@@ -1,6 +1,4 @@
 
-
-i=0
 def show_candidates(candidate_list):
     for idol_list in candidate_list:
         print("%s\n"%idol_list[:2],end='')

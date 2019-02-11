@@ -4,6 +4,7 @@ def search_visitor(name):
     ser_name=f.readlines()
     f.close()
 
+
     for name_list in ser_name:
         if name in name_list[:-7]:
             return name
@@ -11,7 +12,6 @@ def search_visitor(name):
 
 name_vister=input("이름을 입력하세요:")
 search_user=search_visitor(name_vister)
-print(search_user)
 if search_user:
     print("%s님 다시 방문해 주셔서 감사합니다. 즐거운 시간되세요."%search_user)
 else:
