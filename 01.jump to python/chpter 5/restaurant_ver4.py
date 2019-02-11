@@ -54,13 +54,14 @@ name_food.open_restaurant()
 
 while True:
     number_sev = Restaurant_count(input("어서오세요. 몇명이십니까?(초기화:0입력,종료:-1,누적고객 확인:p) : "))
-    print(number_sev)
+    # print(number_sev)
     if number_sev == 'p':
         number_sev.check_customer_number()
     elif number_sev == '-1':
         quit()
     elif number_sev == '0':
         print("손님 카운팅을 0으로 초기화 하였습니다" )
+
     else:
         number_sev.increment_number_served(int(number_sev))
 
