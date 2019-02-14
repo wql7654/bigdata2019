@@ -1,8 +1,8 @@
-b=0
-for i in range(1,1000):
-    if i%3 == 0:
-        b+=i
-    elif i%5 == 0:
-        b+=i
+mutiple_out=0
+for mutiple_cnt in range(1,1000):
+    if mutiple_cnt%3 == 0:
+        mutiple_out+=mutiple_cnt
+    elif mutiple_cnt%5 == 0:
+        mutiple_out+=mutiple_cnt
 
-print(b)
+print(mutiple_out)
