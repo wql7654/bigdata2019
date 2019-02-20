@@ -2,36 +2,44 @@
 from xml.etree.ElementTree import Element, SubElement, dump, ElementTree, parse
 import re
 
-
+age=[]
 def sumup_xml():
     tree = parse("students_info.xml")  # 생성한 xml 파일 파싱하기
     note = tree.getroot()
-    note.getiterator("student_list")
+    count=0
 
-    for parent in tree.getiterator():
-        ft = parent.findtext("student")
-        if ft:
-            print(ft)
+    for parent in note.getiterator("student"):
+        age.append(parent.get("age"))
+        print("- 성별: %s" % parent.get("sex"))
+        print("- 전공: %s" % parent.findtext("age"))
+        print("- 전공: %s" % parent.findtext("major"))
+        for pr_lang in parent.getiterator("language"):
+            if pr_lang:
+                for period_value in pr_lang.getiterator("period"):
+                    print("> %s 학습기간:%s,level:%s" % (
+                    pr_lang.get("name"), period_value.get("value"), pr_lang.get("level")))
 
-    print("blog의 모든 속성 출력")
+        count+=1
+
+    print("전체 학생수:%d"%count)
     print(note.findtext("student"))  # 리스트로 출력된다.
     print("subject 내용 출력")
     # to_tag = note.find("data")
     # print(to_tag.text)
 
 
-
-
-
 def whole_xml():
     tree = parse("students_info.xml")  # 생성한 xml 파일 파싱하기
     note = tree.getroot()
-    # dump(tree.getiterator())
-    # note.getiterator("student_list")
     for parent in note.getiterator("student"):
-        z = re.compile(".")
-        c = z.search(parent)
-        print(c)
+        print("* %s"%parent.get("name"))
+        print("- 성별: %s"%parent.get("sex"))
+        print("- 나이: %s"%parent.findtext("age"))
+        print("- 전공: %s"%parent.findtext("major"))
+        for pr_lang in parent.getiterator("language"):
+            if pr_lang:
+                for period_value in pr_lang.getiterator("period"):
+                    print("> %s 학습기간:%s,level:%s"%(pr_lang.get("name"),period_value.get("value"),pr_lang.get("level")))
         print("----------------------")
 
 
@@ -52,7 +60,7 @@ def indent(elem, level=0):
            elem.tail=i
 
 
-whole_xml()
+sumup_xml()
 
 # while True:
 #     print("학생정보 XML데이터 분석 시작..")
