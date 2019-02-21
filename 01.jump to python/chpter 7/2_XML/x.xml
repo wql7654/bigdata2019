@@ -1,19 +1,28 @@
 <data>
     <AAA>
         <CCC>
-            <BBB>Thisistest1</BBB>
+            <BBB>This</BBB>
+        </CCC>
+        <CCC>
+            <BBB>is</BBB>
+        </CCC>
+        <CCC>
+            <BBB>test1</BBB>
         </CCC>
     </AAA>
 
     <AAA>
         <CCC>
-            <BBB>This is test</BBB>  -> BBB 가 하나이므로 놔둠
+            <BBB>This is test</BBB>
         </CCC>
     </AAA>
 
    <AAA>
         <CCC>
-            <BBB>222222333333</BBB>
+            <BBB>222222</BBB>
+        </CCC>
+        <CCC>
+            <BBB>333333</BBB>
         </CCC>
     </AAA>
 
