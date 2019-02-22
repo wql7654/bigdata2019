@@ -46,16 +46,16 @@ def sumup_xml():
 
 
    print("* 전체 학생수:%d"%count)
-   print("* 성별\n - 남학생: %s명(%s%%)\n - 여학생: %s명(%0.1f%%)"%(boy,boy/int(len(sex))*100,girl,girl/int(len(sex))*100))
+   print("* 성별\n - 남학생: %s명(%0.1f%%)\n - 여학생: %s명(%0.1f%%)"%(boy,boy/int(len(sex))*100,girl,girl/int(len(sex))*100))
    print('* 전공여부')
-   print("- 전공자(컴퓨터 공학, 통계): %s명 (%s%%)" % (major_cnt,(major_cnt/count)*100))
-   print("- 프로그래밍 언어 경험자: %s명 (%s%%)" % (lan_cnt,(lan_cnt/count)*100))
-   print("- 프로그래밍 언어 상급자: %s명 (%s%%)" % (cnt_level,(cnt_level/count)*100))
-   print("- 파이썬 경험자: %s명 (%s%%)"% (cnt_python,(cnt_python/count)*100))
+   print("- 전공자(컴퓨터 공학, 통계): %s명 (%0.1f%%)" % (major_cnt,(major_cnt/count)*100))
+   print("- 프로그래밍 언어 경험자: %s명 (%0.1f%%)" % (lan_cnt,(lan_cnt/count)*100))
+   print("- 프로그래밍 언어 상급자: %s명 (%0.1f%%)" % (cnt_level,(cnt_level/count)*100))
+   print("- 파이썬 경험자: %s명 (%0.1f%%)"% (cnt_python,(cnt_python/count)*100))
    print('* 연령대')
-   print('- 20대: %s명 (%s%%) %s' %(len(age_20),(len(age_20)/count)*100,age_20))
-   print('- 30대: %s명 (%s%%) %s' %(len(age_30),(len(age_30)/count)*100,age_30))
-   print('- 40대: %s명 (%s%%) %s' %(len(age_40),(len(age_40)/count)*100,age_40))
+   print('- 20대: %s명 (%0.1f%%) %s' %(len(age_20),(len(age_20)/count)*100,age_20))
+   print('- 30대: %s명 (%0.1f%%) %s' %(len(age_30),(len(age_30)/count)*100,age_30))
+   print('- 40대: %s명 (%0.1f%%) %s' %(len(age_40),(len(age_40)/count)*100,age_40))
    print("")
 
 def search_xml():
@@ -97,7 +97,7 @@ def whole_xml():
    print("")
 
 
-def insert_xml():  ##반복해서 입력할수있도록 수정해야함
+def insert_xml():
 
     id=[]
     id_append=''
@@ -107,6 +107,7 @@ def insert_xml():  ##반복해서 입력할수있도록 수정해야함
     language_level=[]
 
     while True:
+        id = []
         language_value = []
         period_value = []
         language_level = []
@@ -138,6 +139,8 @@ def insert_xml():  ##반복해서 입력할수있도록 수정해야함
             id.append(parent.get("ID"))
 
 
+        id.sort()
+        print(id)
         for i in id:
             id_num=int(i[-3:])
 
@@ -175,9 +178,11 @@ def insert_xml():  ##반복해서 입력할수있도록 수정해야함
         ElementTree(note).write("students_info_2.xml",encoding='UTF-8',xml_declaration=True)
 
 
-def whole_search_xml(num_data):
+def whole_search_xml2(num_data):
    b=0
+   overlap_data=0
    search_data = input("검색어를 입력하세요: ")
+   count2=0
 
    tree = parse("students_info_2.xml")  # 생성한 xml 파일 파싱하기
    note = tree.getroot()
@@ -194,21 +199,30 @@ def whole_search_xml(num_data):
 
                 elif num_data == '7':
                     search_input = language_value.get("level")
-                if search_data.find(search_input) != -1:
+
+                if search_data.find(search_input) != -1 and int(num_data)>=5:
                     b=1
 
        if num_data == '1':
            search_input = parent.get("ID")
        elif num_data == '2':
            search_input = parent.get("name")
+           if search_data.find(search_input) != -1:
+               count2 += 1
+           elif count2>=2:
+               overlap_data=1
+
+           # print(count2)
+
        elif num_data == '3':
            search_input = parent.findtext("age")
        elif num_data == '4':
            search_input = parent.findtext("major")
        else:
-           search_input="QWEASD"
-       if search_data.find(search_input)!=-1 or b==1:
+           search_input="."
+       if search_data.find(search_input)!=-1 or b==1 and overlap_data==0:
             b=0
+            overlap_data=0
             print("* %s"%parent.get("name"),end='')
             print("(%s)" % parent.get("ID"))
             print("- 성별: %s"%parent.get("sex"))
@@ -220,35 +234,108 @@ def whole_search_xml(num_data):
                     for period_value in language_value.getiterator("period"):
                         print("> %s 학습기간:%s,level:%s"%(language_value.get("name"),period_value.get("value"),language_value.get("level")))
 
+       if overlap_data ==1:
+            print("%s (%s, %s, %s)"%(parent.get("ID"),parent.get("name"),parent.findtext("age"),parent.get("sex")))
    print("")
+
+def whole_search_xml(num_data): ## c검색 안되는거  추가해야함
+   b=0
+   overlap_data=0
+   search_data = input("검색어를 입력하세요: ")
+   count2=0
+   value_count=0
+   search_input=['','','','','','','','','','','','','','','','','','']
+
+
+   tree = parse("students_info_2.xml")  # 생성한 xml 파일 파싱하기
+   note = tree.getroot()
+
+   for parent in note.getiterator("student"):
+       if int(num_data)<5:
+           value_count += 1
+       for language_value in parent.getiterator("language"):
+           if language_value:
+               for period_value in language_value.getiterator("period"):
+                value_count += 1
+                if num_data == '5':
+                    search_input[value_count] = language_value.get("name")
+                    print(search_input[value_count])
+                    print(value_count)
+
+                elif num_data == '6':
+                    search_input[value_count] = period_value.get("value")
+
+                elif num_data == '7':
+                    search_input[value_count] = language_value.get("level")
+
+                if search_input[value_count].find(search_data)!=-1 and int(num_data)>=5:
+                    b=1
+
+
+       if num_data == '1':
+           search_input[value_count] = parent.get("ID")
+       elif num_data == '2':
+           search_input[value_count] = parent.get("name")
+           if search_input[value_count].find(search_data)!=-1:
+                overlap_data+=1
+
+       elif num_data == '3':
+           search_input[value_count] = parent.findtext("age")
+       elif num_data == '4':
+           search_input[value_count] = parent.findtext("major")
+
+
+
+
+   value_count=0
+   for parent in note.getiterator("student"):
+       value_count += 1
+       # print(search_data)
+       # print(search_input[value_count])
+       print(value_count)
+       print("sds%s ,%s,%s"%(search_input[value_count].find(search_data),search_data,search_input[value_count]))
+       if (search_input[value_count].find(search_data)!=-1 or b==1) and overlap_data<=1:
+            b=0
+            overlap_data=0
+            print("* %s"%parent.get("name"),end='')
+            print("(%s)" % parent.get("ID"))
+            print("- 성별: %s"%parent.get("sex"))
+            print("- 나이: %s"%parent.findtext("age"))
+            print("- 전공: %s"%parent.findtext("major"))
+
+            for language_value in parent.getiterator("language"):
+                if language_value:
+                    for period_value in language_value.getiterator("period"):
+                        print("> %s 학습기간:%s,level:%s"%(language_value.get("name"),period_value.get("value"),language_value.get("level")))
+
+       if search_input[value_count].find(search_data)!=-1 and overlap_data >1:
+            print("%s (%s, %s, %s)"%(parent.get("ID"),parent.get("name"),parent.findtext("age"),parent.get("sex")))
+            # overlap_data=0
+
+   print("")
+
 
 
 def del_xml():
     del_id=input("삭제할 ID를 입력하세요: ")
     tree = parse("students_info_2.xml")  # 생성한 xml 파일 파싱하기
     note = tree.getroot()
-    note2=ElementTree()
-    dump(note)
-    # for parent in note.getiterator("student"):
-    #      if del_id==parent.get("ID"):
-    #         note.remove("student")
-            # print("del_id")
+    # dump(note)
+    for parent in note.getiterator("student"):
+        if parent.get("ID") == del_id:
+            note.remove(parent)
+            ElementTree(note).write("students_info_2.xml", encoding='UTF-8', xml_declaration=True)
+
 
 def update_xml():
-    update_id=input("삭제할 ID를 입력하세요: ")
+    update_id=input("수정할 ID를 입력하세요: ")
     tree = parse("students_info_2.xml")  # 생성한 xml 파일 파싱하기
     note = tree.getroot()
     num=1
     value_count=0
+    count=1
 
-    CCC = note.findall('student')  # 모든 AAA를 찾음.
-    AAA= CCC.findall('ID')
 
-    BBB_below_CCC_list = [a.findtext('age') for a in AAA]  # 모든 AAA를 돌면서 자식중에 CCC 아래의 BBB들을 찾음.
-    print(BBB_below_CCC_list)
-
-    for i in BBB_below_CCC_list:
-        print(i)
 
     for parent in note.getiterator("student"):
         if update_id == parent.get("ID"):
@@ -270,36 +357,53 @@ def update_xml():
                     for period_value in language_value.getiterator("period"):
                         value_count+=1
                         print("%d.언어: %s"%(num,language_value.get("name")))
+                        lang_value=language_value.get("name")
                         num += 1
                         print("%d.학습기간: %s"%(num,period_value.get("value")))
+                        per_value=period_value.get("value")
                         num += 1
                         print("%d.레벨: %s"%(num,language_value.get("level")))
+                        level_value=language_value.get("level")
                         num += 1
 
 
     update_info=input("수정할 항목의 번호를 입력하세요: ")
     update_data=input("수정할 값을 입력하세요: ")
-    if update_info =='1':
-        note.replace(name_value,update_data)
-    elif update_info == '2':
-        note.replace(sex_value,update_data)
-    elif update_info == '3':
-        note.replace(age_value,update_data)
-    elif update_info == '4':
-        note.replace(major_value,update_data)
-    for i in range(4,num):
-        if int(update_info)%3=='2':
-            pass
-        if int(update_info)%3=='0':
-            pass
-        if int(update_info)%3=='1':
-            pass
 
-    AAA = note.findall('update_id')  # 모든 AAA를 찾음.
+    for parent in note.getiterator("student"):
+        if (parent.get("ID") == update_id):
+            # dump(parent)
 
-    BBB_below_CCC_list = [a.findall('name') for a in AAA]  # 모든 AAA를 돌면서 자식중에 CCC 아래의 BBB들을 찾음.
-    print(BBB_below_CCC_list)
+            if update_info =='1':
+                parent.set('name', update_data)
+            elif update_info == '2':
+                parent.set('sex', update_data)
+            elif update_info == '3':
+                parent.find('age').text = update_data
+            elif update_info == '4':
+                parent.find('major').text = update_data
+            for language_value in parent.getiterator("language"):
+                count+=3
+                if (int(update_info)<=count+3 and int(update_info)>count):
+                    for i in range(4,num):
+                        if int(update_info)%3==2:
+                            language_value.set('name', update_data)
+                        if int(update_info)%3==0:
+                            sh =language_value.find('period')
+                            sh.set('value', update_data)
+                        if int(update_info)%3==1:
+                            language_value.set('level', update_data)
 
+            print("* %s" % parent.get("name"), end='')
+            print("(%s)" % parent.get("ID"))
+            print("- 성별: %s" % parent.get("sex"))
+            print("- 나이: %s" % parent.findtext("age"))
+            print("- 전공: %s" % parent.findtext("major"))
+            for language_value in parent.getiterator("language"):
+                if language_value:
+                    for period_value in language_value.getiterator("period"):
+                        print("> %s 학습기간:%s,level:%s" % (
+                        language_value.get("name"), period_value.get("value"), language_value.get("level")))
 
     ElementTree(note).write("students_info_2.xml", encoding='UTF-8', xml_declaration=True)
 
@@ -320,22 +424,20 @@ def indent(elem, level=0):
            elem.tail=i
 
 
-individual_xml()
 
-
-# while True:
-#     print("학생정보 XML데이터 분석 시작..")
-#     input_data=input("1.요약정보 \n2.입력 \n3.조회 \n4.수정 \n5.삭제 \n6.종료 \n메뉴 입력: ")
-#     if input_data=='6':
-#         print("학생 정보 분석 완료!")
-#         quit()
-#     elif input_data=='1':
-#         sumup_xml()
-#     elif input_data == '2':  # 입력
-#         pass #insert_xml()
-#     elif input_data == '3':  # 조회
-#         search_xml()
-#     elif input_data == '4':  # 수정
-#         pass  #updata_xml()
-#     elif input_data == '5':  # 삭제
-#         pass  # del_xml()
+while True:
+    print("학생정보 XML데이터 분석 시작..")
+    input_data=input("1.요약정보 \n2.입력 \n3.조회 \n4.수정 \n5.삭제 \n6.종료 \n메뉴 입력: ")
+    if input_data=='6':
+        print("학생 정보 분석 완료!")
+        quit()
+    elif input_data=='1':
+        sumup_xml()
+    elif input_data == '2':  # 입력
+        insert_xml()
+    elif input_data == '3':  # 조회
+        search_xml()
+    elif input_data == '4':  # 수정
+        update_xml()
+    elif input_data == '5':  # 삭제
+        del_xml()

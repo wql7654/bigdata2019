@@ -1,12 +1,24 @@
-# -*- coding: utf-8 -*-
-import xml.etree.ElementTree as ET
-tree = ET.parse('x.xml')
-root = tree.getroot()
-AAA = root.findall('AAA')  # 모든 AAA를 찾음.
-BBB_below_CCC_list = [a.findall('CCC/BBB') for a in AAA]  #  모든 AAA를 돌면서 자식중에 CCC 아래의 BBB들을 찾음.
-for c in BBB_below_CCC_list:  # CCC아래의 BBB리스트를 돌면서
-    if len(c) > 1:  # 엘리먼트가 2개 이상일 경우.
-        _text = ''.join([each.text for each in c])  # 한줄로 합침.
-        print (_text)
-    else:  # 엘리먼트가 한개인 경우 그냥 출력함.
-        print (c[0].text)
+
+from xml.etree.ElementTree import parse, Element, dump, SubElement, ElementTree
+
+tree = parse("students_info.xml")  # 생성한 xml 파일 파싱하기
+note = tree.getroot()
+# note.find("student_list/student").text='name'
+# elem.set('yes', 'no')
+
+# print(elem)
+# dump()
+
+
+i='123006'
+print(int(i[-3:]))
+# for parent in note.getiterator("student"):
+#     if(parent.get("ID")=='ITT001'):
+#         sh =parent.find('age')
+#         parent.find('age').text='hi'
+#         sh.set('name', 'no')
+#         parents = parent.getparent()
+        # note.remove(parent)
+# dump(note)
+
+# ElementTree(note).write("students_info_2.xml", encoding='UTF-8', xml_declaration=True)
