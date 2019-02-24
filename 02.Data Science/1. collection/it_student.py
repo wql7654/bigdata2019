@@ -108,6 +108,41 @@ def search_all():
         except Exception:
             break
 
+
+def search_choice(line_all,mode):
+    json_data = json_read()
+
+    for line_cnt in line_all:
+        line_cnt=int(line_cnt)
+        try:
+            if json_data[line_cnt]['student_ID'] and mode==0:
+                print("ID: %s \n이름: %s \n나이: %s \n주소: %s" % (
+                json_data[line_cnt]["student_ID"], json_data[line_cnt]["student_name"],
+                json_data[line_cnt]["student_age"], json_data[line_cnt]["address"]))
+                print("과거 수강횟수 : %s"%json_data[line_cnt]['total_course_info']['num_of_course_learned'])
+                # print(json_data[line_cnt]['total_course_info']['learning_course_info'][0])
+                line_cnt2 = 0
+                while True:
+                    try:
+                        if json_data[line_cnt]['total_course_info']['learning_course_info']:
+                            print("강의코드:%s \n강의명:%s \n강사명:%s"%(
+                                json_data[line_cnt]['total_course_info']['learning_course_info'][line_cnt2]["course_code"],
+                                json_data[line_cnt]['total_course_info']['learning_course_info'][line_cnt2]["course_name"],
+                                json_data[line_cnt]['total_course_info']['learning_course_info'][line_cnt2]["teacher"],))
+                            print("강의시작일시:%s \n강의종료일시:%s " %(
+                            json_data[line_cnt]['total_course_info']['learning_course_info'][line_cnt2]["open_date"],
+                            json_data[line_cnt]['total_course_info']['learning_course_info'][line_cnt2]["close_date"]))
+                        line_cnt2 += 1
+                    except Exception:
+                        break
+
+
+                print("---------------------------------")
+        except Exception:
+            break
+        if mode==1:
+            print(">> 학생 ID: %s, 학생 이름: %s"%( json_data[line_cnt]["student_ID"], json_data[line_cnt]["student_name"]))
+
 def search_json():
     while True:
         json_data=json_read()
@@ -118,8 +153,39 @@ def search_json():
         elif search_type=='1':
             search_all()
         elif search_type=='2':
-            pass
+            search_data(json_data,"student_ID")
+        elif search_type=='3':
+            search_data(json_data,"student_name")
+        elif search_type == '4':
+            search_data(json_data,"student_age")
+        elif search_type == '5':
+            search_data(json_data,"address")
 
+
+def search_data(json_data,search_data):
+    input_data = str(input("검색할 값을 입력하세요: "))
+    name_cnt = []
+    count = 0
+    while True:
+        try:
+            print(json_data[count][search_data])
+            if json_data[count][search_data].find(input_data) != -1:
+                name_cnt.append(str(count))
+            count += 1
+        except Exception:
+            break
+    print(count)
+    if len(name_cnt) > 1:
+        print("복수 개의 결과가 검색되었습니다. \n  ----- 요약 결과 -----  ")
+        search_choice(name_cnt, 1)
+    else:
+        search_choice(name_cnt, 0)
+
+# json_first[0]["total_course_info"]["learning_course_info"][i]["learning_course_info"]=close_value[i]
+# json_first[0]["total_course_info"]["learning_course_info"][i]["course_code"]=class_code_value[i]
+# json_first[0]["total_course_info"]["learning_course_info"][i]["course_name"]=class_name_value[i]
+# json_first[0]["total_course_info"]["learning_course_info"][i]["open_date"]=open_value[i]
+# json_first[0]["total_course_info"]["learning_course_info"][i]["teacher"]=teacher_name_value[i]
 
 
 
@@ -256,16 +322,7 @@ def del_json():
                 json_write(json_data)
                 break
 
-
-
-# json_first[0]["total_course_info"]["learning_course_info"][i]["learning_course_info"]=close_value[i]
-# json_first[0]["total_course_info"]["learning_course_info"][i]["course_code"]=class_code_value[i]
-# json_first[0]["total_course_info"]["learning_course_info"][i]["course_name"]=class_name_value[i]
-# json_first[0]["total_course_info"]["learning_course_info"][i]["open_date"]=open_value[i]
-# json_first[0]["total_course_info"]["learning_course_info"][i]["teacher"]=teacher_name_value[i]
-
-search_all()
-# search_json()
+search_json()
 # while True:
 #     print("   << json기반 주소록 관리 프로그램 >>")
 #     input_data=input("1.학생 정보입력 \n2.학생 정보조회 \n3.학생 정보수정 \n4.학생 정보삭제 \n5.프로그램 종료 ")

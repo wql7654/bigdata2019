@@ -59,5 +59,23 @@
             ],
             "num_of_course_learned": "2"
         }
+    },
+    {
+        "address": "북구 강암동",
+        "student_ID": "ITT004",
+        "student_age": "33",
+        "student_name": "김민하",
+        "total_course_info": {
+            "learning_course_info": [
+                {
+                    "close_date": "2019-01-01",
+                    "course_code": "IB2929",
+                    "course_name": "할렐루야",
+                    "open_date": "2018-01-01",
+                    "teacher": "구현김"
+                }
+            ],
+            "num_of_course_learned": "1"
+        }
     }
 ]
