@@ -140,7 +140,7 @@ def insert_xml():
 
 
         id.sort()
-        print(id)
+
         for i in id:
             id_num=int(i[-3:])
 
@@ -178,74 +178,16 @@ def insert_xml():
         ElementTree(note).write("students_info_2.xml",encoding='UTF-8',xml_declaration=True)
 
 
-def whole_search_xml2(num_data):
-   b=0
-   overlap_data=0
-   search_data = input("검색어를 입력하세요: ")
-   count2=0
-
-   tree = parse("students_info_2.xml")  # 생성한 xml 파일 파싱하기
-   note = tree.getroot()
-   search_input=""
-   for parent in note.getiterator("student"):
-       for language_value in parent.getiterator("language"):
-           if language_value:
-               for period_value in language_value.getiterator("period"):
-                if num_data == '5':
-                    search_input = language_value.get("name")
-
-                elif num_data == '6':
-                    search_input = period_value.get("value")
-
-                elif num_data == '7':
-                    search_input = language_value.get("level")
-
-                if search_data.find(search_input) != -1 and int(num_data)>=5:
-                    b=1
-
-       if num_data == '1':
-           search_input = parent.get("ID")
-       elif num_data == '2':
-           search_input = parent.get("name")
-           if search_data.find(search_input) != -1:
-               count2 += 1
-           elif count2>=2:
-               overlap_data=1
-
-           # print(count2)
-
-       elif num_data == '3':
-           search_input = parent.findtext("age")
-       elif num_data == '4':
-           search_input = parent.findtext("major")
-       else:
-           search_input="."
-       if search_data.find(search_input)!=-1 or b==1 and overlap_data==0:
-            b=0
-            overlap_data=0
-            print("* %s"%parent.get("name"),end='')
-            print("(%s)" % parent.get("ID"))
-            print("- 성별: %s"%parent.get("sex"))
-            print("- 나이: %s"%parent.findtext("age"))
-            print("- 전공: %s"%parent.findtext("major"))
-
-            for language_value in parent.getiterator("language"):
-                if language_value:
-                    for period_value in language_value.getiterator("period"):
-                        print("> %s 학습기간:%s,level:%s"%(language_value.get("name"),period_value.get("value"),language_value.get("level")))
-
-       if overlap_data ==1:
-            print("%s (%s, %s, %s)"%(parent.get("ID"),parent.get("name"),parent.findtext("age"),parent.get("sex")))
-   print("")
 
 def whole_search_xml(num_data): ## c검색 안되는거  추가해야함
-   b=0
+
    overlap_data=0
    search_data = input("검색어를 입력하세요: ")
-   count2=0
+   count_ex=0
    value_count=0
-   search_input=['','','','','','','','','','','','','','','','','','']
-
+   search_input=['','','','','','','','','','','','','','','','','']
+   search_input2 = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+   ex_parent=[]
 
    tree = parse("students_info_2.xml")  # 생성한 xml 파일 파싱하기
    note = tree.getroot()
@@ -255,21 +197,20 @@ def whole_search_xml(num_data): ## c검색 안되는거  추가해야함
            value_count += 1
        for language_value in parent.getiterator("language"):
            if language_value:
+               value_count2=0
                for period_value in language_value.getiterator("period"):
-                value_count += 1
+                value_count2 += 1
                 if num_data == '5':
-                    search_input[value_count] = language_value.get("name")
-                    print(search_input[value_count])
-                    print(value_count)
+                    search_input2[value_count2] = language_value.get("name")
 
                 elif num_data == '6':
-                    search_input[value_count] = period_value.get("value")
+                    search_input2[value_count2] = period_value.get("value")
 
                 elif num_data == '7':
-                    search_input[value_count] = language_value.get("level")
+                    search_input2[value_count2] = language_value.get("level")
 
-                if search_input[value_count].find(search_data)!=-1 and int(num_data)>=5:
-                    b=1
+                if search_input2[value_count2].find(search_data)!=-1 and int(num_data)>=5:
+                    ex_parent.append(parent)
 
 
        if num_data == '1':
@@ -289,13 +230,13 @@ def whole_search_xml(num_data): ## c검색 안되는거  추가해야함
 
    value_count=0
    for parent in note.getiterator("student"):
-       value_count += 1
-       # print(search_data)
-       # print(search_input[value_count])
-       print(value_count)
-       print("sds%s ,%s,%s"%(search_input[value_count].find(search_data),search_data,search_input[value_count]))
-       if (search_input[value_count].find(search_data)!=-1 or b==1) and overlap_data<=1:
-            b=0
+
+       try:
+           ex_parent.index(parent)
+           count_ex=1
+       except Exception:
+           count_ex=0
+       if (search_input[value_count].find(search_data)!=-1 or count_ex==1) and overlap_data<=1 :
             overlap_data=0
             print("* %s"%parent.get("name"),end='')
             print("(%s)" % parent.get("ID"))
@@ -311,6 +252,7 @@ def whole_search_xml(num_data): ## c검색 안되는거  추가해야함
        if search_input[value_count].find(search_data)!=-1 and overlap_data >1:
             print("%s (%s, %s, %s)"%(parent.get("ID"),parent.get("name"),parent.findtext("age"),parent.get("sex")))
             # overlap_data=0
+       value_count += 1
 
    print("")
 

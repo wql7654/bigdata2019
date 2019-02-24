@@ -11,6 +11,7 @@ print(g_json_big_data[0])
 print(g_json_big_data[0]['레벨 2-1 키'])
 #json 데이터 쓰기, 삽입(create)
 g_json_big_data.append({"레벨 2-4 키":"수박"})
+print(g_json_big_data)
 #json 데이터 수정(update)
 g_json_big_data[0]['레벨 2-1 키']='체리'
 #json 데이터 삭제(Delete)
