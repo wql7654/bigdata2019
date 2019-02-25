@@ -193,8 +193,8 @@ def whole_search_xml(num_data): ## c검색 안되는거  추가해야함
    note = tree.getroot()
 
    for parent in note.getiterator("student"):
-       if int(num_data)<5:
-           value_count += 1
+
+
        for language_value in parent.getiterator("language"):
            if language_value:
                value_count2=0
@@ -224,6 +224,7 @@ def whole_search_xml(num_data): ## c검색 안되는거  추가해야함
            search_input[value_count] = parent.findtext("age")
        elif num_data == '4':
            search_input[value_count] = parent.findtext("major")
+       value_count += 1
 
 
 

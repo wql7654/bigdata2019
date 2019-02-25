@@ -145,6 +145,51 @@ def twentyseven_thing():
     z=re.finditer("\d*",string)
     for c in z:
         print(c)
+def twentyeight_thing():
+    string='a20exerciswwesa,360xrcisa se, 40exercises'
+    z=re.findall("[ae]\w+", string)
+    print(z)
+
+def twentynine_thing():
+    string='a20exerciswwesa,360xrcisa se, 40exercises'
+    z=re.findall("[ae]\w+", string)
+    print(z)
+
+def twentyeight_thing():
+    string='a20exerciswwesa,360xrcisa se, 40exercises'
+    z=re.finditer("\D*\w+", string)
+    print(z)
+def thirty_thing():
+    string="Roadbycar"
+    c = re.sub('Road','rd' , string)
+    print(c)
+
+def thirtyone_thing():
+    string="Road by car"
+    c = re.sub('[,. ]',':' , string)
+    print(c)
 
 
-twentyseven_thing()
+def thirtytwo_thing():
+    string="Road by,.car"
+    c = re.sub('[,. ]',':' , string,2)
+    print(c)
+
+def thirtythree_thing():
+    string = 'wwesa,360xrcisa se, 40exercises'
+    z = re.findall(r"\b\w{5}\b", string)
+    print(z)
+
+def thirtyfour_thing():
+    string = 'a20exerciswwesa,360xrcisa se, 40exercises'
+    z = re.findall(r"\b\w{3,5}\b", string)
+    print(z)
+
+
+def thirtyfive_thing():
+    string = 'a20exerciswwesa,360xrcisa, se, 40exercises'
+    z = re.findall(r"\b\w{4,}\b", string)
+    print(z)
+
+
+thirtyfive_thing()

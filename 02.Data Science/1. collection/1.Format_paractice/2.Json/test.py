@@ -2,15 +2,16 @@ import json
 
 
 
-with open("ITT_Student.json",encoding='UTF8') as json_file: json_object = json.load(json_file)
+with open("ITT_Studenc.json",encoding='UTF8') as json_file: json_object = json.load(json_file)
 json_string = json.dumps(json_object)
 g_json_big_data = json.loads(json_string)
-print(g_json_big_data[1]["total_course_info"]["learning_course_info"][1]["course_name"])
-print(g_json_big_data)
+# print(g_json_big_data[1]["total_course_info"]["learning_course_info"][1]["course_name"])
+# print(g_json_big_data)
+print(g_json_big_data[4]["total_course_info"]["learning_course_info"][0]["course_code"])
 # g_json_big_data[0]['total_course_info']['num_of_course_learned']='ㄴ'
-g_json_big_data[1]["total_course_info"]["learning_course_info"][1]["close_date"] = 2121212
+# g_json_big_data[1]["total_course_info"]["learning_course_info"][1]["close_date"] = 2121212
 # del g_json_big_data[1]["total_course_info"]["learning_course_info"][2]
-print(g_json_big_data[1]["total_course_info"]["learning_course_info"])
+# print(g_json_big_data[1]["total_course_info"]["learning_course_info"])
 # g_json_big_data[0]["total_course_info"]["learning_course_info"][0]["teachers"]="hi"
 # g_json_big_data.dumps({"teachers":"njo"})
 
