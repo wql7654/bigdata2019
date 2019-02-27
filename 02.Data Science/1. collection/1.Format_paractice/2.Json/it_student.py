@@ -207,6 +207,7 @@ def search_json():
         elif search_type == '9':
             search_data(json_data,"teacher",3)
 
+
 def search_data(json_data,search_data,search_mod):
     if search_mod != 4:
         input_data =input("검색할 값을 입력하세요: ")

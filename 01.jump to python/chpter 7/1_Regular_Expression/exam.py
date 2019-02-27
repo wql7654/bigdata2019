@@ -191,5 +191,11 @@ def thirtyfive_thing():
     z = re.findall(r"\b\w{4,}\b", string)
     print(z)
 
+def thirtysix_thing():
+    string="RoadBycar"
+    d = re.sub("(.)([A-Z][a-z]*)",r'\1 \2', string)
+    c = re.sub("([a-z0-9])([A-Z])", r'\1 \2', d).lower()
+    print(c)
 
-thirtyfive_thing()
+
+thirtysix_thing()
