@@ -15,7 +15,7 @@ all3 = re.compile('title="(.*)">.*</a>.*\s+.' #영화이름
                   '*\s+.*\s+.*\s+.*\s+.*\s+alt=\W(.+)" ' #영화업다운
                   'c.*\s+<\w+\s\w+="\w+\s\w+">(\d)+</td>\s{1,5}') #영화 급등락
 allline = all3.findall(str(soup), re.MULTILINE | re.DOTALL | re.VERBOSE)
-
+print(allline)
 tags=['','','']
 list_movie=0
 for tag in allline:
