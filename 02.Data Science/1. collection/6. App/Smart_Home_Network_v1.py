@@ -50,7 +50,8 @@ def get_realtime_weather_info():
     file_folder=glob.glob('./동구*' )
     all2 = re.compile('_([0-9]+)')
     ss=all2.search(str(file_folder))
-    with open('동구_신암동_초단기예보조회%s.json'%str(ss[0]), encoding='UTF8') as json_file:
+
+    with open('동구_신암동_초단기예보조회%s.json'%ss[0], encoding='UTF8') as json_file:
         json_object = json.load(json_file)
         json_string = json.dumps(json_object)
         json_big_data = json.loads(json_string)
