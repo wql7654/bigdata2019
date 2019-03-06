@@ -2,6 +2,7 @@ import glob
 import threading
 import ctypes
 from smart_Home_weather_data import *
+from upbit_service import *
 
 
 
@@ -23,7 +24,8 @@ def print_main_menu():
     print('2. 장비제어')
     print('3. 스마트모드')
     print('4. 오늘의뉴스')
-    print('5. 프로그램 종료')
+    print('5. 코인관리 서비스')
+    print('6. 프로그램 종료')
     print('*********************************************')
 
 def print_device_status(device_name, devcie_status):
@@ -68,7 +70,7 @@ def control_device():
     check_device_status()
 
 def get_realtime_weather_info():
-    global g_humidifier,g_Truedehumidifier,g_air_condition
+    global g_humidifier,g_Truedehumidifier,g_air_condition,g_Radiator
     main_weather()
 
     file_folder=glob.glob('./동구*' )
@@ -85,7 +87,8 @@ def get_realtime_weather_info():
             c_line = f.readline()
             if not c_line: break
             all_value=c_line.split(',')
-    dust_value=all_value[6]
+    dust_value = all_value[6]
+    temp_value = int(all_value[2][:2])
 
     print('실시간 기상정보를 확인합니다.')
     fcstTime = 0; REH_value = 0
@@ -93,6 +96,16 @@ def get_realtime_weather_info():
         if data['category'] == 'REH':
             if fcstTime < data['fcstTime']:
                 REH_value = data['fcstValue']
+
+    print('오늘은 온도는 %s입니다.' % dust_value)
+    if temp_value <= 15:
+        print('온도가 15도 이하 입니다.')
+        hi_temp=input("난방기를 작동하겠습니까?(y/n)")
+        if hi_temp=='y': g_Radiator=True
+    elif temp_value >= 22:
+        print('온도가 22도 보다 높습니다.')
+        print("난방기를 중단하겠습니다")
+        g_Radiator=False
 
     print('습도는 %s입니다.' %REH_value)
     if 40 <= REH_value <= 60:
@@ -112,6 +125,8 @@ def get_realtime_weather_info():
         print('공기가 많이 좋지않습니다.')
         ga_air=input("공기청정기 작동하겠습니까?(y/n)")
         if ga_air=='y': g_air_condition=True
+
+
 
 
 def updata_scheduler():
@@ -301,4 +316,6 @@ while True:
     elif menu_num == 4:
         crawring_data()
     elif menu_num == 5:
+        coin_main()
+    elif menu_num == 6:
         break

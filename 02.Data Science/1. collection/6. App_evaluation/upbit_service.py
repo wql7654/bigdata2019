@@ -294,27 +294,26 @@ def intelligence_order():
 
 
 
-coin_management()
 
 
 
-print("upbit 인공지능 코인 서비스 시뮬레이터")
-print("                         -by이정헌")
-# while True:
-#     while True:
-#         print("1.시세조회\n2.트레이딩\n3.자산관리\n4.인공지능 서비스\n5.종료")
-#         menu_num = int(input('메뉴를 선택하세요: '))
-#
-#         if menu_num == 1:
-#             market_price()
-#         elif menu_num == 2:
-#             trade_service()
-#         elif menu_num == 3:
-#             coin_management()
-#         elif menu_num == 4:
-#             intelligence_mode()
-#         elif menu_num == 5:
-#             quit()
+def coin_main():
+
+    print("upbit 인공지능 코인 서비스 시뮬레이터")
+    print("                         -by이정헌")
+
+    while True:
+        print("1.시세조회\n2.트레이딩\n3.자산관리\n4.종료")
+        menu_num = int(input('메뉴를 선택하세요: '))
+
+        if menu_num == 1:
+            market_price()
+        elif menu_num == 2:
+            trade_service()
+        elif menu_num == 3:
+            coin_management()
+        elif menu_num == 4:
+            break
 
 # with open("test_coin.json", 'w') as f:
 #     f.write(str(name_food.get_accounts()))

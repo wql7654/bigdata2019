@@ -13,6 +13,6 @@ with open("인공지능모드 저장데이터.csv", 'r') as f:
         if not line: break
         b=line.split(',')
 
-print(b[6])
+print(b[2][:2])
 
 
