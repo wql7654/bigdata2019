@@ -1,7 +1,5 @@
 from xml.etree.ElementTree import parse, Element, dump, SubElement, ElementTree
 import MySQLdb
-import pandas as pd
-
 
 def sumup_xml():
    tree = parse("students_info_2.xml")  # 생성한 xml 파일 파싱하기
@@ -123,7 +121,7 @@ def insert_xml():
         else :
             name_value = name_value2
         sex_value=input("- 성별을 입력하시요: ")
-        age_value=input("- 나이를 입력하세요: ")
+        age_value=int(input("- 나이를 입력하세요: "))
         major_value=input("- 전공을 입력하세요: ")
         print("- 사용 가능한 컴퓨터 언어를 입력하세요 ")
         while True:
@@ -143,26 +141,27 @@ def insert_xml():
 
             value_count += 1
 
-
-
         try:
-            mysql_set.execute("SELECT student_id FROM student")
+            mysql_set.execute("SELECT student_id FROM %s"%table_name)
             rows = mysql_set.fetchall()
             id_num=int(str(sorted(list(rows),reverse=True)[0])[4:7])
         except Exception:
             id_num=1
 
-        if id_num<10:
+        if id_num<9:
             id_append='00'+str(id_num+1)
-        elif id_num<100:
+        elif id_num<99:
             id_append = '0'+str(id_num+1)
-        elif id_num<1000:
+        elif id_num<999:
             id_append=id_num+1
         ID="ITT"+id_append
 
-
-        mysql_set.execute("""INSERT INTO student VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"""%(ID,name_value,age_value,major_value,language_value,language_level_hi,language_level_mid,language_level_low))
-
+        language_value=''.join(language_value)
+        language_level_hi=''.join(language_level_hi)
+        language_level_mid=''.join(language_level_mid)
+        language_level_low=''.join(language_level_low)
+        mysql_set.execute("""INSERT INTO %s VALUES ('%s', '%s', %s, '%s', '%s', '%s', '%s', '%s');"""%(table_name,ID, name_value, age_value, major_value, language_value,language_level_hi,language_level_mid,language_level_low))
+        con.commit()
 
 
 def whole_search_xml(num_data): ## c검색 안되는거  추가해야함
@@ -353,9 +352,9 @@ def indent(elem, level=0):
            elem.tail=i
 
 
-con = MySQLdb.connect(host='localhost', port=3306, db='my_suppliers', user='bigdata', passwd='1111')
+con = MySQLdb.connect(host='localhost', port=3306, db='itstudent', user='root', passwd='1111',charset='utf8mb4')
 mysql_set = con.cursor()
-
+table_name='Suppliers'
 
 while True:
     print("학생정보 XML데이터 분석 시작..")
