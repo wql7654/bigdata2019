@@ -48,21 +48,18 @@ def My_Min(data_list):
 def My_Deviation(data_list): # 편차
     My_Deviation=0
 
-    print(data)
     retrun_deviation=[]
     index="My_Deviation"
     list_data=list(data[data_list])
     avg = float(My_Average(data_list))
     for i in list_data:
         My_Deviation = i - avg
-        # print(My_Deviation)
         retrun_deviation.append(My_Deviation)
 
     # print(retrun_deviation)
-    test={index:retrun_deviation}
-    data.append(test)
-    data_df=DataFrame(data)
-    data_df.to_csv('get_col.csv', index=False)
+    # data_df=DataFrame(data)
+    data.insert(2,index,retrun_deviation)
+    data.to_csv('get_col.csv', index=False)
 
     return retrun_deviation
 
