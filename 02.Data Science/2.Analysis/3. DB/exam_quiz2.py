@@ -1,4 +1,4 @@
-from xml.etree.ElementTree import parse, Element, dump, SubElement, ElementTree
+
 import MySQLdb
 
 def sumup_xml():
