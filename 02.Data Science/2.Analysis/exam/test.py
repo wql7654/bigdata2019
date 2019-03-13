@@ -1,24 +1,23 @@
 
-import pandas as pd
+import MySQLdb
+import time
+import csv
 
-input_file="Demographic_Statistics_By_Zip_Code.csv"
-# data_frame = pd.read_csv(data)
+con = MySQLdb.connect(host='localhost', port=3306, db='it_student2', user='root', passwd='1111',charset='utf8mb4')
+mysql_set = con.cursor()
+table_name='student'
 
-# header_list ='COUNT PARTICIPANTS'
-# data_frame = pd.read_csv("Demographic_Statistics_By_Zip_Code.csv",names=header_list)
-# col_instance = data_frame.ix[header_list]
+output_full=[]
 
-data_frame = pd.read_csv(input_file)
+mysql_set.execute(
+    "select * from student_info b left outer join student_languages s on b.student_id = s.student_id where b.student_id='ITT002';")
+rows = mysql_set.fetchall()
+for row in rows:
+    output = []
+    for column_index in range(len(row)):
+        output.append(str(row[column_index]))
+    output_full.append(output)
 
-print(list(data_frame['COUNT PARTICIPANTS']))
-# data_frame_column_by_index = data_frame.ix[data_frame['PERCENT PUBLIC ASSISTANCE TOTAL'].astype(int),:]
-# data_frame_column_by_index = data_frame.ix[:,['PERCENT PUBLIC ASSISTANCE TOTAL']]
-# data_frame_column_by_index=data_frame.ix[:, ['COUNT PARTICIPANTS']]
-# print(list(data_frame_column_by_index))
+output_full.sort()
 
-# data_frame_column_by_index.to_csv(output_file,  index=False)
-
-# data_frame = pd.read_csv(input_file)
-# data_frame_column_by_index = data_frame.iloc[:, [0, 3]]
-#
-# data_frame_column_by_index.to_csv(output_file,  index=False)
+print(output_full[0][0])

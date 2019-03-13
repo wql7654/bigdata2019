@@ -1,5 +1,6 @@
-
 import MySQLdb
+import time
+import csv
 
 def sumup_xml():
 
@@ -158,7 +159,6 @@ def insert_xml():
                 break
             else:
                 language_value.append(language_value2)
-            period_value.append(str(input(" > 학습 기간(년/개월 단위) : ")))
             language_levels=(str(input(" > 수준(상,중,하): ")))
             if language_levels=='상':
                 language_level_hi.append(language_value[value_count])
@@ -197,6 +197,7 @@ def whole_search_xml(num_data):
    search_data = input("검색어를 입력하세요: ")
    output_full=[]
 
+
    if num_data == '1':
        mysql_set.execute("SELECT * FROM %s where student_id like '%%%s%%'" %(table_name,search_data))
    elif num_data == '2':
@@ -234,19 +235,16 @@ def whole_search_xml(num_data):
             print("- 나이: %s" % parent[3])
             print("- 전공: %s" % parent[4])
             parent_language = parent[5].split(' ')
-            level_hi = parent[6].split(' ')
-            level_mi = parent[7].split(' ')
-            level_lo = parent[8].split(' ')
             cnt = 0
             level = ''
             if parent_language[0] != '':
                 for language_value in parent_language:
                     try:
-                        if language_value == level_hi[cnt]:
+                        if parent[6].find(language_value) != -1:
                             level = '상'
-                        elif language_value == level_mi[cnt]:
+                        elif parent[7].find(language_value) != -1:
                             level = '중'
-                        elif language_value == level_lo[cnt]:
+                        elif parent[8].find(language_value) != -1:
                             level = '하'
                     except Exception:
                         pass
@@ -279,9 +277,11 @@ def update_xml():
     value_count=0
     count=1
     up_value=''
-
+    level_value=[]
+    output_full2 = []
     output_full=[]
-    mysql_set.execute("SELECT * FROM student;")
+
+    mysql_set.execute("SELECT * FROM %s;"%table_name)
     rows = mysql_set.fetchall()
     for row in rows:
         output = []
@@ -300,31 +300,29 @@ def update_xml():
             num += 1
             print("%d.전공: %s"%(num,parent[4]))
             num += 1
-            up_value=parent[5]
             parent_language = parent[5].split(' ')
-            level_hi = parent[6].split(' ')
-            level_mi = parent[7].split(' ')
-            level_lo = parent[8].split(' ')
             cnt = 0
             level = ''
             if parent_language[0] != '':
                 print("사용 가능한 컴퓨터 언어")
                 for language_value in parent_language:
+                    level_list=[]
                     try:
-                        if language_value == level_hi[cnt]:
+                        if  parent[6].find(language_value)!=-1:
                             level = '상'
-                        elif language_value == level_mi[cnt]:
+                        elif parent[7].find(language_value)!=-1:
                             level = '중'
-                        elif language_value == level_lo[cnt]:
+                        elif  parent[8].find(language_value)!=-1:
                             level = '하'
                     except Exception:
                         pass
                     value_count+=1
                     print("%d.언어: %s"%(num,language_value))
-                    lang_value=language_value
                     num += 1
                     print("%d.레벨: %s"%(num,level))
-                    level_value=language_value
+                    level_list.append(language_value)
+                    level_list.append(level)
+                    level_value.append(level_list)
                     num += 1
 
 
@@ -351,30 +349,49 @@ def update_xml():
                 if int(update_info)%2==1:
                     num_of=1
                     language_value=update_data
+                    level_value[count2][0] = update_data
                 if int(update_info)%2==0:
                     num_of=2
-                    ##난이도 수정하는거 고치기 요망
+                    level_value[count2][1]=update_data
+
             count+=2
+            count2+=1
+
 
             list_val.append(language_value)
         list_val = ' '.join(list_val)
 
-
+        language_level_hi=[]
+        language_level_mid=[]
+        language_level_low=[]
         if num_of==1:
-            mysql_set.execute("update student set Practicable_computer_languages='%s' where student_id='%s';" % (list_val, update_id))
-        elif num_of==2:
-            pass
+            mysql_set.execute("update %s set Practicable_computer_languages='%s' where student_id='%s';" % (table_name,list_val, update_id))
 
-    mysql_set.execute("SELECT * FROM student;")
-    rows = mysql_set.fetchall()
-    for row in rows:
+        if num_of==2 or num_of==1:
+            for language_value in level_value:
+                if language_value[1] == '상':
+                    language_level_hi.append(language_value[0])
+                elif language_value[1] == '중':
+                    language_level_mid.append(language_value[0])
+                elif language_value[1] == '하':
+                    language_level_low.append(language_value[0])
+            language_level_hi = ' '.join(language_level_hi)
+            language_level_mid = ' '.join(language_level_mid)
+            language_level_low = ' '.join(language_level_low)
+
+            mysql_set.execute("""update %s set high_level='%s',middle_level='%s',low_level='%s' where student_id='%s';""" % (table_name,language_level_hi,language_level_mid,language_level_low,update_id))
+    con.commit()
+    time.sleep(0.5)
+
+    mysql_set.execute("SELECT * FROM %s;"%table_name)
+    rows2 = mysql_set.fetchall()
+    for row in rows2:
         output = []
         for column_index in range(len(row)):
             output.append(str(row[column_index]))
-        output_full.append(output)
-    print(output_full)
+        output_full2.append(output)
 
-    for parent in output_full:
+    for parent in output_full2:
         if update_id == parent[0]:
             print("* %s" % parent[1], end='')
             print("(%s)" % parent[0])
@@ -382,19 +399,17 @@ def update_xml():
             print("- 나이: %s" % parent[3])
             print("- 전공: %s" % parent[4])
             parent_language = parent[5].split(' ')
-            level_hi = parent[6].split(' ')
-            level_mi = parent[7].split(' ')
-            level_lo = parent[8].split(' ')
             cnt = 0
             level = ''
+
             if parent_language[0] != '':
                 for language_value in parent_language:
                     try:
-                        if language_value == level_hi[cnt]:
+                        if  parent[6].find(language_value)!=-1:
                             level = '상'
-                        elif language_value == level_mi[cnt]:
+                        elif parent[7].find(language_value)!=-1:
                             level = '중'
-                        elif language_value == level_lo[cnt]:
+                        elif  parent[8].find(language_value)!=-1:
                             level = '하'
                     except Exception:
                         pass
@@ -403,21 +418,27 @@ def update_xml():
     print("")
     # con.commit()
 
+def inset_csv():
+    try:
+        mysql_set.execute('desc %s'%table_name)
+    except Exception:
+        mysql_set.execute("CREATE TABLE IF NOT EXISTS student(Student_ID VARCHAR(20),Name VARCHAR(20),sex VARCHAR(20),Age int,Major VARCHAR(20),"
+                      "Practicable_computer_languages VARCHAR(20),High_level VARCHAR(20),Middle_level VARCHAR(20),Low_level VARCHAR(20));")
+        con.commit()
+    with open('student_info.csv', newline='', encoding = 'utf-8') as infile:
+        data = list(csv.reader(infile))
 
-def indent(elem, level=0):
-    i="\n"+ level*" "
-    if len(elem):
-        if not elem.text or not elem.text.strip():
-            elem.text = i + " "
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-        for elem in elem:
-            indent(elem, level+1)
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-    else:
-        if level and (not elem.tail or not elem.tail.strip()):
-           elem.tail=i
+    sel_op= input("기존데이터가 다 사라지고 csv파일의 데이터를 불러옵니다 하시겠습니까(y/n): ")
+    if sel_op=='y':
+        mysql_set.execute("delete FROM %s"%table_name)
+
+        for i in data:
+            mysql_set.execute("""INSERT INTO %s VALUES ('%s', '%s','%s', %s, '%s', '%s', '%s', '%s', '%s');"""
+                            %(table_name,i[0], i[1],i[2], i[3], i[4], i[5],i[6],i[7],i[8]))
+        con.commit()
+
+
+
 
 
 con = MySQLdb.connect(host='localhost', port=3306, db='it_student', user='root', passwd='1111',charset='utf8mb4')
@@ -426,7 +447,7 @@ table_name='student'
 
 while True:
     print("학생정보 XML데이터 분석 시작..")
-    input_data=input("1.요약정보 \n2.입력 \n3.조회 \n4.수정 \n5.삭제 \n6.종료 \n메뉴 입력: ")
+    input_data=input("1.요약정보 \n2.입력 \n3.조회 \n4.수정 \n5.삭제 \n6.종료 \n7.데이터입력 \n메뉴 입력: ")
     if input_data=='6':
         print("학생 정보 분석 완료!")
         quit()
@@ -440,3 +461,5 @@ while True:
         update_xml()
     elif input_data == '5':  # 삭제
         del_xml()
+    elif input_data == '7':  # 삭제
+        inset_csv()
