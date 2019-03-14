@@ -2,10 +2,10 @@ import MySQLdb
 import time
 import csv
 
-def sumup_xml():
+def sumup_db():
 
    count=0
-   sex = []
+   parent_test = ''
    lan_cnt=0
    cnt_level=0
    cnt_python=0
@@ -50,7 +50,7 @@ def sumup_xml():
            age_40.append(parent[1]+':'+parent[3])
 
        if parent[4].find("컴퓨터")!=-1 or parent[4].find("통계")!=-1:
-           major_cnt += 1
+            major_cnt += 1
        count += 1
 
    for parent in output_full2:
@@ -59,7 +59,10 @@ def sumup_xml():
             cnt_python+=1
        if parent[2].find("상")!=-1:
             cnt_level+=1
-       lan_cnt += 1
+
+       if parent[0] != parent_test:
+            lan_cnt += 1
+       parent_test = parent[0]
 
    print("* 전체 학생수:%d"%count)
    print("* 성별\n - 남학생: %s명(%0.1f%%)\n - 여학생: %s명(%0.1f%%)"%(boy,(boy/count)*100,girl,(girl/count)*100))
@@ -74,28 +77,28 @@ def sumup_xml():
    print('- 40대: %s명 (%0.1f%%) %s' %(len(age_40),(len(age_40)/count)*100,age_40))
    print("")
 
-def search_xml():
+def search_db():
     while True:
         print("<조회 서브 메뉴>")
         input_data=input("1.개별 학생 조회 \n2.전체 학생 조회 \n3.상위 메뉴 \n메뉴입력: ")
         if input_data=='3':
             break
         elif input_data=='2':
-            whole_xml()
+            whole_db()
         elif input_data == '1':
-            individual_xml()
+            individual_db()
 
-def individual_xml():
+def individual_db():
     while True:
         print("<검색 조건>")
         print("1.ID \n2.이름 \n3.나이 \n4.전공 \n5.컴퓨터 언어 명 \n6.컴퓨터 언어 학습 기간 \n7.컴퓨터 언어 레벨 \n8.상위 메뉴 \n")
         input_data = input("메뉴 입력: ")
         if input_data=='1' or input_data == '2' or input_data == '3' or input_data == '4' or input_data == '5' or input_data == '6' or input_data == '7':
-            whole_search_xml(input_data)
+            whole_search_db(input_data)
         elif input_data == '8':
             break
 
-def whole_xml():
+def whole_db():
    output_full = []
 
 
@@ -125,7 +128,7 @@ def whole_xml():
           print("> %s,학습기간:%s 수준:%s"%(parent[6],parent[7],parent[8]))
    print("")
 
-def insert_xml():
+def insert_db():
 
     id=[]
     id_append=''
@@ -185,7 +188,7 @@ def insert_xml():
         con.commit()
 
 
-def whole_search_xml(num_data):
+def whole_search_db(num_data):
 
    search_data = input("검색어를 입력하세요: ")
    output_full=[]
@@ -249,7 +252,7 @@ def whole_search_xml(num_data):
 
 
 
-def del_xml():
+def del_db():
     del_id=input("삭제할 ID를 입력하세요: ")
 
     if del_id != '':
@@ -262,7 +265,7 @@ def del_xml():
             pass
 
 
-def update_xml():
+def update_db():
 
     update_id=input("수정할 ID를 입력하세요: ")
     num=1
@@ -374,7 +377,7 @@ def update_xml():
     print("")
     # con.commit()
 
-def inset_csv():
+def insert_csv():
     try:
         mysql_set.execute('desc %s'%table_list)
     except Exception:
@@ -415,20 +418,20 @@ table_list='student_info'
 table_language='student_languages'
 
 while True:
-    print("학생정보 XML데이터 분석 시작..")
+    print("학생정보 db데이터 분석 시작..")
     input_data=input("1.요약정보 \n2.입력 \n3.조회 \n4.수정 \n5.삭제 \n6.종료 \n7.데이터입력 \n메뉴 입력: ")
     if input_data=='6':
         print("학생 정보 분석 완료!")
         quit()
     elif input_data=='1':
-        sumup_xml()
+        sumup_db()
     elif input_data == '2':  # 입력
-        insert_xml()
+        insert_db()
     elif input_data == '3':  # 조회
-        search_xml()
+        search_db()
     elif input_data == '4':  # 수정
-        update_xml()
+        update_db()
     elif input_data == '5':  # 삭제
-        del_xml()
-    elif input_data == '7':  # 삭제
-        inset_csv()
+        del_db()
+    elif input_data == '7':  # csv파일 insert
+        insert_csv()
