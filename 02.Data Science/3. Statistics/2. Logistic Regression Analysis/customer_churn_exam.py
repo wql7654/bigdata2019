@@ -13,14 +13,17 @@ churn.columns = [heading.lower() for heading in \
 churn['churn01'] = np.where(churn['churn'] == 'True.', 1., 0.)
 
 
-colums_list = ['Area_Code','VMail_Message','intl_plan','vmail_plan','account_length','custserv_calls',
-               'Day_Mins','Day_Calls','Day_Charge','Eve_Mins','Eve_Calls','Eve_Charge','Night_Mins',
-               'Night_Calls','Night_Charge','Intl_Mins','Intl_Calls','Intl_Charge']
+colums_list = ['VMail_Message','intl_plan1','vmail_plan1','custserv_calls',
+               'Day_Mins','Day_Calls','Eve_Mins','Eve_Calls','Night_Mins',
+               'Night_Calls','Intl_Mins','Intl_Calls','total_charge']
+
+churn['total_charge']=churn['total_charges'] = churn['day_charge'] + churn['eve_charge'] + \
+                         churn['night_charge'] + churn['intl_charge']
 
 dependent_variable = churn['churn01']
 
-churn['intl_plan'] = np.where(churn['intl_plan'] == 'yes', 1, 0)
-churn['vmail_plan'] = np.where(churn['vmail_plan'] == 'yes', 1, 0)
+churn['intl_plan1'] = np.where(churn['intl_plan'] == 'yes', 1, 0)
+churn['vmail_plan1'] = np.where(churn['vmail_plan'] == 'yes', 1, 0)
 
 count_all=0
 all_time=[]
@@ -33,14 +36,10 @@ for num in range(1,5):
         alllist=[]
         for lens_num in tuple_num:
             lens_num=lens_num.lower()
-            if count==0:
-                churn['total_charges']=churn[lens_num]
-            else:
-                churn['total_charges']=churn['total_charges']+churn[lens_num]
             alllist.append(lens_num)
-            count += 1
 
-        independent_variables = churn[['total_charges']]
+
+        independent_variables = churn[alllist]
         independent_constant = sm.add_constant(independent_variables, prepend=True)
         logit_model = sm.Logit(dependent_variable, independent_constant).fit()
 

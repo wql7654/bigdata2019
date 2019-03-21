@@ -314,7 +314,7 @@ def coin_main():
             coin_management()
         elif menu_num == 4:
             break
-
+coin_main()
 # with open("test_coin.json", 'w') as f:
 #     f.write(str(name_food.get_accounts()))
 
