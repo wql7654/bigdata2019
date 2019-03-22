@@ -20,5 +20,5 @@ predict = clf.predict(data_test)
 #결과 테스트하기
 ac_score = metrics.accuracy_score(label_test,predict)
 cl_report = metrics.classification_report(label_test,predict)
-print("정단률 =",ac_score)
+print("정답률 =",ac_score)
 print("리포트 = \n",cl_report)

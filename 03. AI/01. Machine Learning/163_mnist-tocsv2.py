@@ -1,6 +1,6 @@
 import struct
 import pandas as pd
-def to_csv(name, maxdata):
+def to_csv2(name, maxdata):
     # 레이블 파일과 이미지 파일 열기
     lbl_f = open('./mnist/' + name + '-labels-idx1-ubyte', 'rb')
     img_f = open('./mnist/' + name + '-images-idx3-ubyte', 'rb')
@@ -30,9 +30,9 @@ def to_csv(name, maxdata):
     lbl_f.close()
     img_f.close()
 # 결과를 파일로 출력하기
-to_csv('train', 10)
+to_csv2('train', 1000)
 # to_csv('train', 60000)
-to_csv('t10k', 5)
+to_csv2('t10k', 1000)
 
 
 data = pd.read_csv("./mnist/train.csv",header=None)
