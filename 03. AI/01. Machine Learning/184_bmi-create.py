@@ -18,3 +18,6 @@ for i in range(40000):
     fp.write("{0},{1},{2}\r\n".format(h,w,label))
 fp.close()
 print("ok",cnt)
+
+
+
