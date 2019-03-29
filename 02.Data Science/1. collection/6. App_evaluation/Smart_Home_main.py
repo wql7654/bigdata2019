@@ -172,7 +172,7 @@ def updata_scheduler():
 def scheduler_saved():
 
     while True:
-        if time.strftime("%M%S") == "4530":
+        if time.strftime("%M%S") == "4530": #api가 45분마다 새로운데이터로 갱신되므로 45분30초에 데이터를 갱신
             day_time = time.strftime("%H%M", time.localtime(time.time()))
             data_saved_csv(day_time)
             time.sleep(10)

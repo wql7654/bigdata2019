@@ -41,15 +41,15 @@ def get_Weather_URL(day_time):       ## (1) 기상 정보(동네예보정보 조
 
 def get_Air_URL():
     end_point="http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty"
-
-    parameters = "?ServiceKey="+access_key
-    parameters +="&sidoName="+urllib.parse.quote(sidoName)
-    parameters +="&ver="+ver_info
+    #api 주소
+    parameters = "?ServiceKey="+access_key #서비스 키
+    parameters +="&sidoName="+urllib.parse.quote(sidoName) #파싱할 지역
+    parameters +="&ver="+ver_info #api 버전관리
 
     url = end_point + parameters
     retData = urllib.request.urlopen(url)
 
-    return retData
+    return retData #베이스가 json이라 json데이터로 리턴
 
 def Make_Weather_Json(day_time):     ## (1) 기상 정보(동네예보정보 조회 서비스) json 파일 생성하는 함수
     jsonData = get_Weather_URL(day_time)
@@ -226,7 +226,7 @@ def crawring_data():
     while True:
         num+=1
         today_news_info=soup.find('li', attrs={'class': 'ranking_item is_num%s'%num})
-        name_new = re.compile('.+lede">\s+(.+).*\s+.*</div>')
+        name_new = re.compile('.+lede">\s+(.+).*\s+.*</div>') #요약뉴스를 정규식으로 정리
         tags = name_new.findall(str(today_news_info), re.MULTILINE | re.DOTALL)
         print("제목:%s"%today_news_info.a['title'])
         print("뉴스요약:%s"%tags)

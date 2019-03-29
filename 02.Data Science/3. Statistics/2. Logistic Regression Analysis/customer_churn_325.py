@@ -10,14 +10,9 @@ churn.columns = [heading.lower() for heading in \
                  churn.columns.str.replace(' ', '_').str.replace("\'", "").str.strip('?')]
 
 churn['churn01'] = np.where(churn['churn'] == 'True.', 1., 0.)
-
-
-
 churn['total_charges'] = churn['day_charge'] + churn['eve_charge'] + \
                          churn['night_charge'] + churn['intl_charge']
-
 dependent_variable = churn['churn01']
-
 independent_variables = churn[['account_length','custserv_calls','total_charges']]
 independent_constant = sm.add_constant(independent_variables, prepend=True)
 logit_model = sm.Logit(dependent_variable, independent_constant).fit()
@@ -35,11 +30,7 @@ for predict_value in y_predicted_rounded:
 
     else:
         logistic_predicted_value_list.append(True)
-
-# print(churn['churn?'])
-
 for i in logistic_predicted_value_list:
-    print(i)
     i=str(i) + '.'
     if i== churn['churn'][all_on]:
         false_on += 1

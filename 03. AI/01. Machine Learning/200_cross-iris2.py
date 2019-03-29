@@ -11,3 +11,5 @@ clf = svm.SVC(gamma='auto')
 scores = model_selection.cross_val_score(clf, data, label, cv=5)
 print('각각의 정답률: ', scores)
 print('평균 정답률: ', scores.mean())
+
+

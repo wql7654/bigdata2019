@@ -43,7 +43,7 @@ class Upbitpy():
         URL = 'https://api.upbit.com/v1/market/all'
         return self._get(URL)
 
-    def get_market_ticket(self,coins):
+    def get_market_ticket(self,coins): #코인별 시세조회
         URL = "https://api.upbit.com/v1/ticker"
         querystring = {"markets": "KRW-"+coins}
         # response = requests.request("GET", url, params=querystring)
@@ -314,9 +314,3 @@ def coin_main():
             coin_management()
         elif menu_num == 4:
             break
-coin_main()
-# with open("test_coin.json", 'w') as f:
-#     f.write(str(name_food.get_accounts()))
-
-# name_food=Upbitpy()
-# print(name_food.get_accounts())
