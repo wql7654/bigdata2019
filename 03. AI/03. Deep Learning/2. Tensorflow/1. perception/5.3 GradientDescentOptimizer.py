@@ -7,6 +7,7 @@ W=tf.Variable(tf.random_normal([1]),name='weight')
 
 hypothesis=X*W
 
+
 cost=tf.reduce_mean(tf.square(hypothesis-Y))
 
 opt=tf.train.GradientDescentOptimizer(learning_rate=0.01)
